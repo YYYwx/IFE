@@ -1,0 +1,99 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset=" utf-8"> 
+<meta name="author" content="http://www.softwhy.com/" /> 
+<title></title> 
+<style type="text/css"> 
+	#fade { 
+		display:none; 
+		position:absolute; 
+		top:0%; 
+		left:0%; 
+		width:100%; 
+		height:100%; 
+		background-color:black; 
+		z-index:1001; 
+		-moz-opacity:0.8; 
+		opacity:0.8; 
+		 
+	} 
+	#light{ 
+		display:none; 
+		position:absolute; 
+		width: 400px;
+		height: 200px;
+		left: 25%;
+		top: 25%;
+		width: 50%;
+		height: 50%;  
+		background-color:white; 
+		z-index:1002; 
+		overflow:auto; 
+	} 
+	body{
+		overflow-x:hidden;
+		overflow-y:hidden;  
+	}
+</style> 
+<script type="text/javascript"> 
+	window.onload=function(){ 
+	// 	function getPos(oEvent){
+	// 	var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+	// 	var scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;
+	// 	return{x:scrollLeft+oEvent.clientX,y:scrollTop+oEvent.clientY};
+	// }
+		var linkbt = document.getElementById("linkbt"); 
+		var light = document.getElementById('light'); 
+		var fade = document.getElementById('fade'); 
+		var closebt = document.getElementById("closebt"); 
+		linkbt.onclick = function(){ 
+			light.style.display = 'block'; 
+			fade.style.display = 'block'; 
+		} 
+		closebt.onclick = function(){ 
+			light.style.display = 'none'; 
+			fade.style.display = 'none'; 
+		} 
+		light.onmousedown = function(ev){
+                var ev = ev || event;
+                var disX = ev.clientX - light.offsetLeft;
+                var disY = ev.clientY - light.offsetTop;
+                console.log(this);
+                //给document添加事件是为了防止鼠标脱离出这个div
+                document.onmousemove = function(ev){
+                    var ev = ev || event;
+                    var l = ev.clientX - disX;
+                    var t = ev.clientY -disY;
+                    if(l<0){
+                    	l=0;
+                    }
+                    else if(l>document.documentElement.clientWidth - light.offsetLeft){
+                    	l=document.documentElement.clientWidth - light.offsetLeft;
+                    }
+                    if(t<0){
+                    	t=0;
+                    }
+                    else if(t>document.documentElement.clientHeight - light.offsetTop){
+                    	t= document.documentElement.clientHeight - light.offsetTop;
+                    }
+                    light.style.left = l + 'px';
+                    light.style.top = t + 'px';
+                }//onmousemove不管鼠标按没按下去都会执行，所以这个函数要嵌套进onmousedown这个函数里边
+
+                document.onmouseup = function(){
+                    document.onmousemove = document.onmouseup = null;
+                    //清除onmousemove事件，去掉onmouseup是清除垃圾
+                }
+                
+            }
+	} 
+
+</script> 
+</head> 
+<body> 
+<button id="linkbt">弹出浮出层</button>
+<div id="light"><button id="closebt">关闭窗口</button></div> 
+<div id="fade""></div> 
+</body> 
+</html> 
